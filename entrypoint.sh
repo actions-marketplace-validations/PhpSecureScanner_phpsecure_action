@@ -18,17 +18,17 @@ while getopts ":w:d:" o; do
   esac
 done
 
-PHP_SECURE_PROJECT_NAME=$INPUT_PROJECT_NAME
+PHPSECURE_PROJECT_NAME=$INPUT_PROJECT_NAME
 
 if $DEBUG; then
-  echo "Use auth token: $PHP_SECURE_AUTH_TOKEN"
+  echo "Use auth token: $PHPSECURE_AUTH_TOKEN"
 fi
 
 ENDPOINT="https://api.phpsecure.net/api/projects"
 
-if [ -z "$PHP_SECURE_PROJECT_NAME" ]; then
-  PHP_SECURE_PROJECT_NAME=$GITHUB_REPOSITORY
-  echo "PHP_SECURE_PROJECT_NAME is empty. Use default value: '$PHP_SECURE_PROJECT_NAME'"
+if [ -z "$PHPSECURE_PROJECT_NAME" ]; then
+  PHPSECURE_PROJECT_NAME=$GITHUB_REPOSITORY
+  echo "PHPSECURE_PROJECT_NAME is empty. Use default value: '$PHPSECURE_PROJECT_NAME'"
 fi
 
 #1. Prepare source
@@ -58,19 +58,19 @@ if [ $? -ne 0 ]; then
 fi
 
 # create project.
-PROJECT_POST_DATA="{\"name\":\"$PHP_SECURE_PROJECT_NAME\",\"type\":2}"
+PROJECT_POST_DATA="{\"name\":\"$PHPSECURE_PROJECT_NAME\",\"type\":2}"
 if $DEBUG; then
   echo "Try create project: $PROJECT_POST_DATA"
 fi
 
-PROJECT_DATA=$(curl --silent -H 'content-type: application/json' -H "Authorization: Bearer $PHP_SECURE_AUTH_TOKEN" -X POST $ENDPOINT/get_uuid --data-raw "$PROJECT_POST_DATA")
+PROJECT_DATA=$(curl --silent -H 'content-type: application/json' -H "Authorization: Bearer $PHPSECURE_AUTH_TOKEN" -X POST $ENDPOINT/get_uuid --data-raw "$PROJECT_POST_DATA")
 
 if $DEBUG; then
   echo "API response PROJECT_DATA: $PROJECT_DATA"
 fi
 
 if [ $? -ne 0 ]; then
-  echo "Failed to create project. Check the API key (environment variable PHP_SECURE_AUTH_TOKEN)" >&2
+  echo "Failed to create project. Check the API key (environment variable PHPSECURE_AUTH_TOKEN)" >&2
   exit 1
 fi
 
@@ -86,7 +86,7 @@ if $DEBUG; then
 fi
 
 echo "Getting a secure URL to upload the archive"
-UPLOAD_DATA=$(curl --silent -H "Authorization: Bearer $PHP_SECURE_AUTH_TOKEN" $ENDPOINT/upload_url/$PROJECT_UUID)
+UPLOAD_DATA=$(curl --silent -H "Authorization: Bearer $PHPSECURE_AUTH_TOKEN" $ENDPOINT/upload_url/$PROJECT_UUID)
 if [ $? -ne 0 ]; then
   echo "Error while getting URL for secure archive upload." >&2
   exit 1
@@ -100,7 +100,7 @@ fi
 UPLOAD_URL=$(echo $UPLOAD_DATA | jq -r '.url')
 UPLOAD_UUID=$(echo $UPLOAD_DATA | jq -r '.upload_uuid')
 if [ -z "$UPLOAD_URL" ]; then
-  echo "Failed to get upload URL. Check the API key (environment variable PHP_SECURE_AUTH_TOKEN)." >&2
+  echo "Failed to get upload URL. Check the API key (environment variable PHPSECURE_AUTH_TOKEN)." >&2
   exit 1
 fi
 
@@ -117,7 +117,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Running source code analysis"
-SECURITY_CHECK_DATA=$(curl --silent -H "Authorization: Bearer $PHP_SECURE_AUTH_TOKEN" $ENDPOINT/run/$UPLOAD_UUID/s3)
+SECURITY_CHECK_DATA=$(curl --silent -H "Authorization: Bearer $PHPSECURE_AUTH_TOKEN" $ENDPOINT/run/$UPLOAD_UUID/s3)
 if [ $? -ne 0 ]; then
   echo "Failed to run check. Contact technical support https://phpsecure.net/" >&2
   exit 1
@@ -148,7 +148,7 @@ SCAN_IS_FINISH=false
 echo -n "Scan in processing "
 
 for ((i = 1; i <= 10; i++)); do
-  SCAN_DATA=$(curl --silent -H "Authorization: Bearer $PHP_SECURE_AUTH_TOKEN" $ENDPOINT/$PROJECT_UUID/check)
+  SCAN_DATA=$(curl --silent -H "Authorization: Bearer $PHPSECURE_AUTH_TOKEN" $ENDPOINT/$PROJECT_UUID/check)
   SCAN_PERCENT=$(echo $SCAN_DATA | jq -r '.data[0].scannedPercent')
   STAT_CODE_LINES=$(echo $SCAN_DATA | jq -r '.data[0].stats.codeLines')
   PROJECT_STATUS=$(echo $SCAN_DATA | jq -r '.project.last_security_check.status')
