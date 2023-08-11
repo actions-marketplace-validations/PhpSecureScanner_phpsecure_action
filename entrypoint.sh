@@ -18,15 +18,9 @@ while getopts ":w:d:" o; do
   esac
 done
 
-env
-
-PHP_SECURE_AUTH_TOKEN=$INPUT_AUTH_TOKEN
 PHP_SECURE_PROJECT_NAME=$INPUT_PROJECT_NAME
 
 if $DEBUG; then
-  echo "PHPSECURE_AUTH_TOKEN: $PHPSECURE_AUTH_TOKEN"
-  echo "auth_token: $auth_token"
-  echo "INPUT_AUTH_TOKEN: $INPUT_AUTH_TOKEN"
   echo "Use auth token: $PHP_SECURE_AUTH_TOKEN"
 fi
 
