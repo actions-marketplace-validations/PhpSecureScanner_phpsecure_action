@@ -18,9 +18,10 @@ while getopts ":w:d:" o; do
   esac
 done
 
-env
-
 PHPSECURE_PROJECT_NAME=$INPUT_PROJECT_NAME
+if [ -z "$PHPSECURE_PROJECT_NAME" ] && [ "$PROJECT_NAME" ]; then
+  PHPSECURE_PROJECT_NAME=$PROJECT_NAME
+fi
 
 if $DEBUG; then
   echo "Use auth token: $PHPSECURE_AUTH_TOKEN"
