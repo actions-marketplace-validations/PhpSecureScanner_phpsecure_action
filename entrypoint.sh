@@ -2,7 +2,7 @@
 
 #default variables
 WAIT_COMPLETE=false
-DEBUG=true
+DEBUG=false
 
 while getopts ":w:d:" o; do
   case "${o}" in
