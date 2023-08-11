@@ -1,0 +1,19 @@
+name: "Phpsecure Vulnerabilities Scanner"
+description: "https://phpsecure.net/"
+
+branding:
+  icon: "check"
+  color: "green"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+
+inputs:
+  auth_token:
+    description: "Phpsecure auth token. You can get it in the profile on the site https://phpsecure.net/"
+    required: true
+  project_name:
+    description: "The project's unique key. If you don't specify a project name, the name of the github repository will be used."
+    required: false
+    default: ""
