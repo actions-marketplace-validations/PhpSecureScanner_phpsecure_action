@@ -52,7 +52,7 @@ fi
 
 #2. Prepare archive
 echo "Create sources archive"
-zip -q -r /tmp/sources.zip $CI_PROJECT_DIR/ -i '*.php'
+zip -r /tmp/sources.zip $GITHUB_WORKSPACE/ -i '*.php'
 if [ $? -ne 0 ]; then
   echo "Failed to get archive with source code." >&2
   exit 1
