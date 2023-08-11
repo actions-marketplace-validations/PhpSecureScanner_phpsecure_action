@@ -18,6 +18,8 @@ while getopts ":w:d:" o; do
   esac
 done
 
+env
+
 PHPSECURE_PROJECT_NAME=$INPUT_PROJECT_NAME
 
 if $DEBUG; then
@@ -28,7 +30,7 @@ ENDPOINT="https://api.phpsecure.net/api/projects"
 
 if [ -z "$PHPSECURE_PROJECT_NAME" ]; then
   PHPSECURE_PROJECT_NAME=$GITHUB_REPOSITORY
-  echo "PHPSECURE_PROJECT_NAME is empty. Use default value: '$PHPSECURE_PROJECT_NAME'"
+  echo "INPUT_PROJECT_NAME is empty. Use default value: '$PHPSECURE_PROJECT_NAME'"
 fi
 
 #1. Prepare source
