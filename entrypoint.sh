@@ -18,6 +18,8 @@ while getopts ":w:d:" o; do
   esac
 done
 
+env
+
 PHP_SECURE_AUTH_TOKEN=$INPUT_AUTH_TOKEN
 PHP_SECURE_PROJECT_NAME=$INPUT_PROJECT_NAME
 
